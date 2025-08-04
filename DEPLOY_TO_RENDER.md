@@ -1,7 +1,12 @@
 # Deploy QRkhana to Render - Step by Step Guide
 
 ## What You Have
-This folder contains a clean deployment package (924KB, 86 files) that's optimized for GitHub upload.
+This folder contains a clean deployment package that's optimized for GitHub upload and Render deployment.
+
+## ✅ Fixed Issues
+- **Build Error**: Removed all logo/asset imports that caused "file not found" errors
+- **Dependencies**: All build tools moved to production dependencies 
+- **Commands**: Updated to use npx for reliable tool execution
 
 ## Step 1: Upload to GitHub (Free)
 
