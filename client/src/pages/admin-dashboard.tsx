@@ -82,7 +82,8 @@ export default function AdminDashboard() {
   
   const { data: stats, isLoading } = useQuery({
     queryKey: ["/api/dashboard/stats"],
-    refetchInterval: 5000, // Reduced to 5 seconds for backup polling
+    enabled: !!user, // Only fetch when authenticated
+    refetchInterval: 30000, // 30 seconds backup polling
   });
 
   const logoutMutation = useMutation({
@@ -114,7 +115,8 @@ export default function AdminDashboard() {
       const response = await fetch("/api/analytics?period=today&serviceType=restaurant");
       return response.json();
     },
-    refetchInterval: 5000, // Reduced to 5 seconds for backup polling
+    enabled: !!user, // Only fetch when authenticated
+    refetchInterval: 30000, // 30 seconds backup polling
   });
 
   const { data: barAnalytics } = useQuery({
@@ -123,7 +125,8 @@ export default function AdminDashboard() {
       const response = await fetch("/api/analytics?period=today&serviceType=bar");
       return response.json();
     },
-    refetchInterval: 5000, // Reduced to 5 seconds for backup polling
+    enabled: !!user, // Only fetch when authenticated
+    refetchInterval: 30000, // 30 seconds backup polling
   });
 
   // Payment analytics
@@ -133,7 +136,8 @@ export default function AdminDashboard() {
       const response = await fetch("/api/analytics/payments?period=today");
       return response.json();
     },
-    refetchInterval: 5000, // Reduced to 5 seconds for backup polling
+    enabled: !!user, // Only fetch when authenticated
+    refetchInterval: 30000, // 30 seconds backup polling
   });
 
   if (authLoading || isLoading) {

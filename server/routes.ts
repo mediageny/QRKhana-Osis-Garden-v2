@@ -38,16 +38,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     store: new pgStore({
       conString: process.env.DATABASE_URL,
       createTableIfMissing: true,
-      tableName: 'sessions',
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+      tableName: 'sessions'
     }),
     secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Enable secure cookies in production
+      secure: false, // Disabled for Render compatibility
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: 'lax' // Better session persistence
     }
   }));
 
@@ -275,8 +275,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Table not found" });
       }
 
-      // Use environment variable for domain or fallback to localhost
-      const domain = process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000';
+      // Use Render domain or environment variable for domain
+      const domain = process.env.RENDER_EXTERNAL_URL?.replace('https://', '').replace('http://', '') 
+        || process.env.REPLIT_DOMAINS?.split(',')[0] 
+        || 'localhost:5000';
       const protocol = domain.includes('localhost') ? 'http' : 'https';
       const qrUrl = `${protocol}://${domain}/order/${table.number}`;
       

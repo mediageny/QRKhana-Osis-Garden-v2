@@ -7,6 +7,8 @@ This folder contains a clean deployment package that's optimized for GitHub uplo
 - **Build Error**: Removed all logo/asset imports that caused "file not found" errors
 - **Dependencies**: All build tools moved to production dependencies 
 - **Commands**: Updated to use npx for reliable tool execution
+- **Database SSL**: Fixed SSL/TLS connection errors for production PostgreSQL
+- **Session Storage**: Configured session store with proper SSL settings
 
 ## Step 1: Upload to GitHub (Free)
 
@@ -67,6 +69,9 @@ Click "Advanced" and add these environment variables:
 2. **NODE_ENV**
    - Value: `production`
 
+3. **RENDER_EXTERNAL_URL** (Important!)
+   - Value: `https://qrkhana-osis-garden.onrender.com`
+
 ### Deploy
 1. Click "Create Web Service"
 2. Wait 5-10 minutes for deployment
@@ -97,19 +102,20 @@ Click "Advanced" and add these environment variables:
 
 ## Troubleshooting
 
-### If deployment fails:
-1. Check build logs in Render dashboard
-2. Ensure all environment variables are set correctly
-3. Verify GitHub repository has all files
+### If QR codes show localhost URLs:
+1. **CRITICAL**: Add `RENDER_EXTERNAL_URL` environment variable
+2. Value: `https://qrkhana-osis-garden.onrender.com`
+3. Redeploy service
 
-### If admin login doesn't work:
-1. Wait 2-3 minutes for database initialization
-2. Check DATABASE_URL is correctly set
-3. Try refreshing the page
+### If admin keeps logging out:
+1. Check DATABASE_URL includes SSL parameters
+2. Wait 2-3 minutes for session table creation
+3. Clear browser cookies and try again
 
-### If QR codes don't work:
-1. Ensure tables are created (check admin dashboard)
-2. Verify URL format: `your-app-url.com/table/1`
+### If dashboard shows 401 errors:
+1. Login again (sessions may have reset after deployment)
+2. Check that all environment variables are set
+3. Try hard refresh (Ctrl+F5)
 
 ## Next Steps
 
